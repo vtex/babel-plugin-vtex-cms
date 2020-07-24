@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`works 1`] = `
+"import React from \\"react\\";
+import RichText from \\"vtex.store-components/RichText\\";
+
+const HelloWorld = () => <div>
+    <RichText textAlignment=\\"CENTER\\" textPosition=\\"CENTER\\" text=\\"# Hello, World!\\" />
+  </div>;
+
+export default HelloWorld;"
+`;
