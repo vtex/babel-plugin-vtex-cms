@@ -4,26 +4,29 @@ export default function(): PluginObj {
   return {
     visitor: {
       AssignmentExpression(path) {
-        const { node } = path;
+        const { node, parentPath } = path;
         const isObjectPropertyAssignment = types.isMemberExpression(node.left);
 
         if (!isObjectPropertyAssignment) {
           return;
         }
 
-        const isDisplayName = types.isIdentifier((node.left as any).property, {
-          name: 'displayName',
-        });
+        const isDisplayName = types.isIdentifier(
+          (node.left as types.MemberExpression).property,
+          {
+            name: 'displayName',
+          }
+        );
 
         const isSchemaDefinition = types.isIdentifier(
-          (node.left as any).property,
+          (node.left as types.MemberExpression).property,
           {
             name: 'schema',
           }
         );
 
         if (isDisplayName || isSchemaDefinition) {
-          path.parentPath.remove();
+          parentPath.remove();
         }
       },
     },
