@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Generating an interfaces.json file should generate interfaces.json file for a virtual block 1`] = `
+"{
+    \\"hello-world\\": {
+      \\"component\\": \\"HelloWorld\\",
+      \\"content\\": {\\"title\\":\\"Hello World\\",\\"properties\\":{\\"text\\":{\\"title\\":\\"Text\\",\\"type\\":\\"string\\"},\\"alignment\\":{\\"title\\":\\"Alignment\\",\\"type\\":\\"string\\"}}}
+    }
+  }"
+`;
