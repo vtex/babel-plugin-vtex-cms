@@ -1,5 +1,6 @@
-import plugin from '../src';
-import pluginTester from 'babel-plugin-tester';
+import pluginTester from 'babel-plugin-tester'
+
+import plugin from '../src'
 
 const codeToBeChanged = `
 import React from "react";
@@ -31,7 +32,7 @@ HelloWorld.schema = {
   }
 }
 
-export default HelloWorld;`;
+export default HelloWorld;`
 
 const expectedTransformedCode = `
 import React from 'react';
@@ -47,7 +48,7 @@ const HelloWorld = () => (
   </div>
 );
 
-export default HelloWorld;`;
+export default HelloWorld;`
 
 const codeThatShouldNotChange = `
   import React from 'react';
@@ -77,10 +78,10 @@ const codeThatShouldNotChange = `
       },
     },
   };
-  export default HelloWorld;`;
+  export default HelloWorld;`
 
 pluginTester({
-  plugin: plugin,
+  plugin,
   pluginName: 'babel-plugin-vtex-cms',
   snapshot: false,
   babelOptions: {
@@ -93,4 +94,4 @@ pluginTester({
     },
     "Does not change code that doesn't contain .schema and .displayName assignments": codeThatShouldNotChange,
   },
-});
+})
