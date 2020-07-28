@@ -1,7 +1,7 @@
 import plugin from '../src';
-import { transformSync } from '@babel/core';
+import pluginTester from 'babel-plugin-tester';
 
-const exampleWithAssignments = `
+const codeToBeChanged = `
 import React from "react";
 import RichText from "vtex.store-components/RichText";
 
@@ -31,12 +31,11 @@ HelloWorld.schema = {
   }
 }
 
-export default HelloWorld;
-`;
+export default HelloWorld;`;
 
-const exampleWithoutAssignments = `
-import React from "react";
-import RichText from "vtex.store-components/RichText";
+const expectedTransformedCode = `
+import React from 'react';
+import RichText from 'vtex.store-components/RichText';
 
 const HelloWorld = () => (
   <div>
@@ -48,35 +47,50 @@ const HelloWorld = () => (
   </div>
 );
 
-HelloWorld.notADisplayName = 'hello-world';
+export default HelloWorld;`;
 
-HelloWorld.notASchema = {
-  title: 'Hello World',
-  properties: {
-    text: {
-      title: "Text",
-      type: "string",
+const codeThatShouldNotChange = `
+  import React from 'react';
+  import RichText from 'vtex.store-components/RichText';
+
+  const HelloWorld = () => (
+    <div>
+      <RichText
+        textAlignment="CENTER"
+        textPosition="CENTER"
+        text="# Hello, World!"
+      />
+    </div>
+  );
+
+  HelloWorld.notADisplayName = 'hello-world';
+  HelloWorld.notASchema = {
+    title: 'Hello World',
+    properties: {
+      text: {
+        title: 'Text',
+        type: 'string',
+      },
+      alignment: {
+        title: 'Alignment',
+        type: 'string',
+      },
     },
-    alignment: {
-      title: "Alignment",
-      type: "string",
-    }
-  }
-}
+  };
+  export default HelloWorld;`;
 
-export default HelloWorld;
-`;
-
-it('should remove .schema and .displayName assignments from JSX code', () => {
-  const tranformResult = transformSync(exampleWithAssignments, {
-    plugins: [plugin, '@babel/plugin-syntax-jsx'],
-  });
-  expect(tranformResult?.code).toMatchSnapshot();
-});
-
-it('should not change code if no .schema or .displayName assignments are found', () => {
-  const tranformResult = transformSync(exampleWithoutAssignments, {
-    plugins: [plugin, '@babel/plugin-syntax-jsx'],
-  });
-  expect(tranformResult?.code).toMatchSnapshot();
+pluginTester({
+  plugin: plugin,
+  pluginName: 'babel-plugin-vtex-cms',
+  snapshot: false,
+  babelOptions: {
+    plugins: ['@babel/plugin-syntax-jsx'],
+  },
+  tests: {
+    'Removes .schema and .displayName assignments from input code': {
+      code: codeToBeChanged,
+      output: expectedTransformedCode,
+    },
+    "Does not change code that doesn't contain .schema and .displayName assignments": codeThatShouldNotChange,
+  },
 });
