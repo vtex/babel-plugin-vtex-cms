@@ -17,7 +17,9 @@
     "lint": "tsdx lint",
     "prepare": "tsdx build"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "@babel/core": "^7.10.5"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
