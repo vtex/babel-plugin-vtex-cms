@@ -23,8 +23,7 @@
       "pre-commit": "tsdx lint"
     }
   },
-  "name": "babel-plugin-vtex-cms",
-  "author": "VTEX",
+  "name": "@vtex/babel-plugin-vtex-cms",
   "module": "dist/babel-plugin-vtex-cms.esm.js",
   "devDependencies": {
     "@babel/plugin-syntax-jsx": "^7.10.4",
