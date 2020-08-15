@@ -1,4 +1,25 @@
-import { PluginObj, types } from '@babel/core'
+import { PluginObj, types, Visitor } from '@babel/core'
+
+const ObjectExpressionVisitor: Visitor = {
+  ObjectExpression(path) {
+    const { node } = path
+
+    const newSchema = node.properties.filter(
+      (objProperty) =>
+        types.isObjectProperty(objProperty) &&
+        types.isIdentifier(objProperty.key) &&
+        objProperty.key.name === 'title'
+    )
+
+    if (newSchema.length === 0) {
+      throw new Error(
+        'Found a .schema definition with no title. Please add a title to your schema.'
+      )
+    }
+
+    node.properties = newSchema
+  },
+}
 
 export default function(): PluginObj {
   return {
@@ -25,8 +46,10 @@ export default function(): PluginObj {
           }
         )
 
-        if (isDisplayName || isSchemaDefinition) {
+        if (isDisplayName) {
           parentPath.remove()
+        } else if (isSchemaDefinition) {
+          path.traverse(ObjectExpressionVisitor as Visitor)
         }
       },
     },
